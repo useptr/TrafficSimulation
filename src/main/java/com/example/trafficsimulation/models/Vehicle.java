@@ -7,12 +7,15 @@ public class Vehicle {
     private double accelerationTime = 3, decelerationTime = accelerationTime/2; // с
     private double mainlineSpeed = 8, speed = mainlineSpeed; // м/с
     private double brakingDistance;
-    public Vehicle(double width, double height, double x, double y) {
+    public Vehicle(double width, double height) {
         WIDTH = width;
         HEIGHT = height;
+
+//        decelerationTime = (weight*speed)/Friction force
+    }
+    public void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
-//        decelerationTime = (weight*speed)/Friction force
     }
     public void move() {
         x += 2;

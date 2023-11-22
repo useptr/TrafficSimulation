@@ -1,5 +1,6 @@
 package com.example.trafficsimulation;
 
+import com.example.trafficsimulation.controllers.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

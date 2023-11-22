@@ -1,10 +1,8 @@
-package com.example.trafficsimulation;
+package com.example.trafficsimulation.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Rectangle;
 
 public class Controller {
     MapController mapController = new MapController();
