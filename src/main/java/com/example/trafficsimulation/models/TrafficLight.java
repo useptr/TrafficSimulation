@@ -1,6 +1,7 @@
 package com.example.trafficsimulation.models;
 
 import com.example.trafficsimulation.events.EventManager;
+import com.example.trafficsimulation.events.TrafficLightChangeStageEvent;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,16 +24,18 @@ public class TrafficLight {
             countdown = 0;
 
         if (isRedStage()) {
-            events.notify("red light is on");
             stage = TrafficLightsStage.RED;
+            events.notify("red light is on", new TrafficLightChangeStageEvent(stage));
+
         } else if (isRedYellowStage()) {
-            events.notify("red and yellow light is on");
             stage = TrafficLightsStage.RED_YELLOW;
+            events.notify("red and yellow light is on", new TrafficLightChangeStageEvent(stage));
+
         } else if (isYellowStage()) {
-            events.notify("yellow light is on");
+            events.notify("yellow light is on",new TrafficLightChangeStageEvent(stage));
             stage = TrafficLightsStage.YELLOW;
         } else if (isGreenStage()) {
-            events.notify("green light is on");
+            events.notify("green light is on",new TrafficLightChangeStageEvent(stage));
             stage = TrafficLightsStage.GREEN;
         }
     }

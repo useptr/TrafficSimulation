@@ -24,10 +24,10 @@ public class EventManager {
         users.remove(listener);
     }
 
-    public void notify(String eventType) {
+    public void notify(String eventType, Event event) {
         List<EventListener> users = listeners.get(eventType);
         for (EventListener listener : users) {
-            listener.handle(eventType);
+            listener.handle(eventType, event);
         }
     }
 }

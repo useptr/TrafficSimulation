@@ -13,11 +13,11 @@ public class VehicleController implements EventListener {
         this.view = view;
     }
     public void update(double timeLeft) {
-        vehicle.update(timeLeft);
+        vehicle.update(timeLeft/1000);
         view.setPosition(vehicle.x(),vehicle.y());
     }
     @Override
-    public void handle(String eventType) {
+    public void handle(String eventType, Event event) {
 
     }
 }

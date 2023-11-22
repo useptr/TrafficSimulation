@@ -1,5 +1,6 @@
 package com.example.trafficsimulation.controllers;
 
+import com.example.trafficsimulation.events.Event;
 import com.example.trafficsimulation.events.EventListener;
 import com.example.trafficsimulation.models.TrafficLight;
 import com.example.trafficsimulation.views.TrafficLightView;
@@ -15,7 +16,7 @@ public class TrafficLightController implements EventListener {
         trafficLight.events.subscribe( "green light is on", this);
     }
     @Override
-    public void handle(String eventType) {
+    public void handle(String eventType, Event event) {
 //        System.out.println("DS");
         if (eventType.equals("red light is on")) {
             view.turnOnRedLight();
