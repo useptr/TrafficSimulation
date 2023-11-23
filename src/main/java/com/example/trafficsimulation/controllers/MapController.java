@@ -1,5 +1,6 @@
 package com.example.trafficsimulation.controllers;
 
+import com.example.trafficsimulation.events.EventListener;
 import com.example.trafficsimulation.factories.CarFactory;
 import com.example.trafficsimulation.models.Vehicle;
 import com.example.trafficsimulation.views.TrafficLightView;
@@ -23,7 +24,7 @@ public class MapController {
 //    private TrafficLightView trafficLight = new TrafficLightView();
 
     private TrafficLightController trafficLightController = new TrafficLightController();
-    private LinkedList<VehicleController> vehicleControllers = new LinkedList<>();
+    private LinkedList<VehicleController> vehicleControllers = VehicleController.vehicleControllers;
 //    private ArrayList<VehicleView> vehicles = new ArrayList<>();
     private AnchorPane map = new AnchorPane();
     // 10 millis - 100 fps
@@ -66,11 +67,13 @@ public class MapController {
         timeline.play();
     }
     private double countdown = 0;
+    private int count = 0;
     public void vehicleHandler(ActionEvent event) {
         countdown += DURATION;
-        if (countdown > 2000) {
+        if (countdown > 2000 ) { // && count < 3
             countdown = 0;
             createVehicle();
+            count++;
         }
 //        double offset = 2;
 //        car.setX(car.getX()+offset);
@@ -101,14 +104,35 @@ public class MapController {
     public void createVehicle() {
         VehicleController controller = carFactory.createVehicle(20, 15);
 
-        double x = controller.vehicle.width();
+        double x = -controller.vehicle.width();
         double y = road.getLayoutY()+road.getHeight()/2-controller.vehicle.height()/2;
+
+        for (VehicleController vehicleController :vehicleControllers) {
+            Vehicle other = vehicleController.vehicle;
+            if (other.x() <= x+other.width())
+                return;
+        }
 //        System.out.println(x + " " + y);
         controller.vehicle.setPosition(x, y);
 
         map.getChildren().add(controller.view.view());
         controller.view.setPosition(x, y);
+//        Vehicle next = null;
+//        try {
+//            next = vehicleControllers.peek().vehicle;
+//        }
+//        catch (NullPointerException e) {
+//
+//        }
+//        controller.setNextVehicle(next);
         vehicleControllers.add(controller);
+
+//        controller.setNextTrafficLight(trafficLightController.view.x());
+        controller.setNextTrafficLight(244); // WIDTH/2
+        trafficLightController.subscribe("red light is on", controller);
+        trafficLightController.subscribe( "red and yellow light is on",controller);
+        trafficLightController.subscribe("yellow light is on", controller);
+        trafficLightController.subscribe( "green light is on", controller);
 
 ////        double x = width;
 

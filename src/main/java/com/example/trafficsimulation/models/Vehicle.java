@@ -1,7 +1,7 @@
 package com.example.trafficsimulation.models;
 
 public class Vehicle {
-    private VehicleState state = VehicleState.ACCELERATING;
+    private VehicleState state = VehicleState.MOVING;
     private final double WIDTH, HEIGHT;
     private double x, y;
     private double accelerationTime = 2, decelerationTime = accelerationTime/2; // с
@@ -24,8 +24,8 @@ public class Vehicle {
         this.state = state;
     }
     public void move(double timeLeft) {
-        x += timeLeft*speed;
-        accelerationTimeLeft = decelerationTimeLeft = 0;
+        x += timeLeft*mainlineSpeed;
+//        accelerationTimeLeft = decelerationTimeLeft = 0;
     }
     public void accelerate(double timeLeft) {
         accelerationTimeLeft += timeLeft;
@@ -34,6 +34,9 @@ public class Vehicle {
             speed = mainlineSpeed;
             accelerationTimeLeft = 0;
         } else {
+//            if (speed == 0) {
+//                System.out.println("0");
+//            }
             speed = getNewSpeedWithAccelerate(accelerationTimeLeft, 0, accelerationTime, 0, mainlineSpeed);
         }
         x += timeLeft*speed;
@@ -60,6 +63,7 @@ public class Vehicle {
             speed = 0;
         } else {
             speed = getNewSpeedWithSlow(decelerationTimeLeft, 0, decelerationTime, mainlineSpeed, 0);
+            System.out.println(speed);
 //            System.out.println(speed);
             x += timeLeft * speed;
         }
@@ -71,11 +75,12 @@ public class Vehicle {
         } else if (state == VehicleState.ACCELERATING) {
             accelerate(timeLeft);
         } else if (state == VehicleState.SLOWING) {
-//            System.out.println("DA");
-            slow(timeLeft);
+//            slow(timeLeft);
         }
     }
-
+    public VehicleState state() {
+        return state;
+    }
     public double width() {
         return WIDTH;
     }

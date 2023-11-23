@@ -14,7 +14,7 @@ public class VehicleView {
 //        System.out.println(vehicle.width() + " " + vehicle.height());
         view = new Rectangle(width, height);
 //        map.getChildren().add(view);
-        view.setFill(Color.BLUE);
+        view.setFill(color);
 //        view.setLayoutX(vehicle.x());
 //        view.setLayoutY(vehicle.y());
     }

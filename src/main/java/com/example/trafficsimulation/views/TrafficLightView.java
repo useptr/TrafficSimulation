@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 public class TrafficLightView {
     private StackPane root;
     private VBox vBox;
-    private double x;
+//    private double x;
 //    private Color bgColor = Color.web("#111111");
     private Color offStageColor = Color.web("#333333");
     private Circle redCircle = new Circle(6,offStageColor);
@@ -56,10 +56,10 @@ public class TrafficLightView {
     }
 
     public double x() {
-        return x;
+        return root.getLayoutX()-root.getWidth()/2;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
+//    public void setX(double x) {
+//        this.x = x;
+//    }
 }
