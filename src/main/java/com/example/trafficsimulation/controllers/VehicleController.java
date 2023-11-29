@@ -1,19 +1,19 @@
 package com.example.trafficsimulation.controllers;
 
-import com.example.trafficsimulation.events.Event;
-import com.example.trafficsimulation.events.EventListener;
-import com.example.trafficsimulation.events.TrafficLightChangeStageEvent;
-import com.example.trafficsimulation.models.TrafficLightsStage;
 import com.example.trafficsimulation.models.Vehicle;
 import com.example.trafficsimulation.models.VehicleState;
+import com.example.trafficsimulation.trafficlight.TrafficLightsControl;
+import com.example.trafficsimulation.trafficlight.interfaces.TrafficLightEventListener;
+import com.example.trafficsimulation.trafficlight.models.TrafficLightEvent;
 import com.example.trafficsimulation.views.VehicleView;
 
 import java.util.LinkedList;
 
-public class VehicleController implements EventListener {
+public class VehicleController implements TrafficLightEventListener {
     public static LinkedList<VehicleController> vehicleControllers = new LinkedList<>();
     public double nextTrafficLightPosX;
-    private TrafficLightsStage lastStage = TrafficLightsStage.GREEN;
+    private TrafficLightsControl.Event state = TrafficLightsControl.Event.RED;
+//    private TrafficLightsStage lastStage = TrafficLightsStage.GREEN;
 //    private Vehicle nextVehicle=null;
     public Vehicle vehicle;
     public VehicleView view;
@@ -33,7 +33,7 @@ public class VehicleController implements EventListener {
                 }
             }
         boolean trafficLightTooClose = vehicle.x() + vehicle.width() < nextTrafficLightPosX && vehicle.x()+ vehicle.width()+brakingDistance > nextTrafficLightPosX;
-        boolean StageNeedToStop = lastStage == TrafficLightsStage.RED || lastStage == TrafficLightsStage.YELLOW || lastStage == TrafficLightsStage.RED_YELLOW;
+        boolean StageNeedToStop = state == TrafficLightsControl.Event.RED || state == TrafficLightsControl.Event.YELLOW || state == TrafficLightsControl.Event.RED_YELLOW;
         if (trafficLightTooClose && StageNeedToStop) {
             vehicle.setState(VehicleState.SLOWING);
             return;
@@ -54,7 +54,7 @@ public class VehicleController implements EventListener {
         }
 
         if (vehicle.x() < nextTrafficLightPosX) {
-            if (lastStage == TrafficLightsStage.GREEN && vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
+            if (state == TrafficLightsControl.Event.GREEN && vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
                 vehicle.setState(VehicleState.ACCELERATING);
                 return;
             }
@@ -75,26 +75,31 @@ public class VehicleController implements EventListener {
 //        if (vehicle.state() == VehicleState.ACCELERATING || vehicle.state() == VehicleState.MOVING)
 //            System.out.println(vehicle.state());
     }
-    @Override
-    public void handle(String eventType, Event event) {
-
-        TrafficLightChangeStageEvent stageEvent = (TrafficLightChangeStageEvent)event;
-        lastStage = stageEvent.stage;
-        if (vehicle.x() < nextTrafficLightPosX) {
-            if (eventType.equals("red light is on")) {
-//                view.turnOnRedLight();
-            } else if (eventType.equals("red and yellow light is on")) {
-//                view.turnOnRedYellowLight();
-            } else if (eventType.equals("yellow light is on")) {
-//                view.turnOnYellowLight();
-            } else if (eventType.equals("green light is on")) {
-//                view.turnOnGreenLight();
-            }
-        }
-    }
+//    @Override
+//    public void handle(String eventType, Event event) {
+//
+//        TrafficLightChangeStageEvent stageEvent = (TrafficLightChangeStageEvent)event;
+//        lastStage = stageEvent.stage;
+//        if (vehicle.x() < nextTrafficLightPosX) {
+//            if (eventType.equals("red light is on")) {
+////                view.turnOnRedLight();
+//            } else if (eventType.equals("red and yellow light is on")) {
+////                view.turnOnRedYellowLight();
+//            } else if (eventType.equals("yellow light is on")) {
+////                view.turnOnYellowLight();
+//            } else if (eventType.equals("green light is on")) {
+////                view.turnOnGreenLight();
+//            }
+//        }
+//    }
     public void setNextTrafficLight(double x) {
 //        System.out.println(x);
         nextTrafficLightPosX = x;
+    }
+
+    @Override
+    public void update(TrafficLightsControl.Event eventType, TrafficLightEvent event) {
+        state = eventType;
     }
 
 //    public void setNextVehicle(Vehicle nextVehicle) {

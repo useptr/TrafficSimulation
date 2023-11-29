@@ -1,10 +1,8 @@
 package com.example.trafficsimulation.controllers;
 
-import com.example.trafficsimulation.events.EventListener;
 import com.example.trafficsimulation.factories.CarFactory;
 import com.example.trafficsimulation.models.Vehicle;
-import com.example.trafficsimulation.views.TrafficLightView;
-import com.example.trafficsimulation.views.VehicleView;
+import com.example.trafficsimulation.trafficlight.TrafficLightsControl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,16 +12,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MapController {
     private final static CarFactory carFactory = new CarFactory();
     private final double WIDTH=500, HEIGHT=300;
-    private final double DURATION = 10;
+    private final double DURATION = 10; // 10 millis - 100 fps
 //    private TrafficLightView trafficLight = new TrafficLightView();
 
-    private TrafficLightController trafficLightController = new TrafficLightController();
+//    private TrafficLightController trafficLightController = new TrafficLightController();
+    private TrafficLightsControl trafficLightsControl = new TrafficLightsControl();
     private LinkedList<VehicleController> vehicleControllers = VehicleController.vehicleControllers;
 //    private ArrayList<VehicleView> vehicles = new ArrayList<>();
     private AnchorPane map = new AnchorPane();
@@ -46,10 +44,19 @@ public class MapController {
         road.setLayoutY(HEIGHT-road.getHeight());
         map.getChildren().add(road);
 
-        map.getChildren().add(trafficLightController.view());
+//        map.getChildren().add(trafficLightController.view());
+//        trafficLightsControl.setPrefWidth(20);
+        trafficLightsControl.setPrefHeight(40);
+        map.getChildren().add(trafficLightsControl);
+        System.out.println(trafficLightsControl.getPrefWidth());
+        System.out.println(trafficLightsControl.getPrefHeight());
+        System.out.println(trafficLightsControl.getWidth());
+        System.out.println(trafficLightsControl.getHeight());
+        trafficLightsControl.setLayoutX(WIDTH/2-trafficLightsControl.getPrefHeight()/2);
+        trafficLightsControl.setLayoutY(HEIGHT/3*2-trafficLightsControl.getPrefHeight()*2);
 //        System.out.println(trafficLight.view().getWidth());
-        trafficLightController.view().setLayoutX(WIDTH/2-6);
-        trafficLightController.view().setLayoutY(HEIGHT/3*2-70);
+//        trafficLightController.view().setLayoutX(WIDTH/2-6);
+//        trafficLightController.view().setLayoutY(HEIGHT/3*2-70);
 //        System.out.println(road.getX() + " " + road.getY());
 //        System.out.println(road.getLayoutX() + " " + road.getLayoutY());
 
@@ -128,11 +135,13 @@ public class MapController {
         vehicleControllers.add(controller);
 
 //        controller.setNextTrafficLight(trafficLightController.view.x());
+        controller.setNextTrafficLight(WIDTH/2-trafficLightsControl.getPrefHeight()/2);
         controller.setNextTrafficLight(244); // WIDTH/2
-        trafficLightController.subscribe("red light is on", controller);
-        trafficLightController.subscribe( "red and yellow light is on",controller);
-        trafficLightController.subscribe("yellow light is on", controller);
-        trafficLightController.subscribe( "green light is on", controller);
+        trafficLightsControl.events.subscribeAll(controller);
+//        trafficLightController.subscribe("red light is on", controller);
+//        trafficLightController.subscribe( "red and yellow light is on",controller);
+//        trafficLightController.subscribe("yellow light is on", controller);
+//        trafficLightController.subscribe( "green light is on", controller);
 
 ////        double x = width;
 
