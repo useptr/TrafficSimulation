@@ -25,18 +25,18 @@ public class TrafficLightsControl extends AnchorPane implements TrafficLightBeha
         }
     } // события светофора
     public TrafficLightEventManager events = new TrafficLightEventManager(Event.RED, Event.RED_YELLOW, Event.YELLOW, Event.GREEN);
-    private int[] stateDurations = {4, 6, 8, 12}; // продолжительности фаз
+    private int[] stateDurations = {8, 9, 10, 13}; // продолжительности фаз
     private final int statesSize = 4; // количество фаз
     private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), this::stateHandler));
     private boolean isOn = true; // состояние светофора вкл/выкл
     private int countdown = 0; // время светофора
     public TrafficLightComponent trafficLight = new TrafficLightComponent(); // view
     public TrafficLightsControl() {
-            this.setStyle("-fx-background-color: gray;");
+//            this.setStyle("-fx-background-color: gray;");
             this.getChildren().add(trafficLight.root());
             trafficLight.initBinds(this);
             timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
+
     } // конструктор
     // TrafficLightBehaviour Override методы
     @Override
@@ -44,7 +44,17 @@ public class TrafficLightsControl extends AnchorPane implements TrafficLightBeha
         isOn = true;
         state = Event.RED;
         countdown = 0;
+        timeline.play();
     }
+
+    @Override
+    public void off() {
+        isOn = false;
+        countdown = 0;
+        timeline.stop();
+        trafficLight.off();
+    }
+
     @Override
     public void reset() {
         isOn = false;

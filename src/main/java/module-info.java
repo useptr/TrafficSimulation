@@ -1,7 +1,8 @@
 module com.example.trafficsimulation {
     requires javafx.controls;
     requires javafx.fxml;
-
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens com.example.trafficsimulation to javafx.fxml;
     exports com.example.trafficsimulation;
@@ -13,4 +14,5 @@ module com.example.trafficsimulation {
     opens com.example.trafficsimulation.controllers to javafx.fxml;
     exports com.example.trafficsimulation.factories;
     opens com.example.trafficsimulation.factories to javafx.fxml;
+
 }

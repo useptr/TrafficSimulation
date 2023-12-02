@@ -4,6 +4,7 @@ import com.example.trafficsimulation.trafficlight.TrafficLightsControl;
 
 public interface TrafficLightBehaviour {
     void on();
+    void off();
     void reset();
     void setState(TrafficLightsControl.Event state);
     TrafficLightsControl.Event state(); // получить текущее состояние

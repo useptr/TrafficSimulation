@@ -12,6 +12,8 @@ import java.util.LinkedList;
 public class VehicleController implements TrafficLightEventListener {
     public static LinkedList<VehicleController> vehicleControllers = new LinkedList<>();
     public double nextTrafficLightPosX;
+    public boolean passed = false;
+    private boolean sameTimeAcceleration = false;
     private TrafficLightsControl.Event state = TrafficLightsControl.Event.RED;
 //    private TrafficLightsStage lastStage = TrafficLightsStage.GREEN;
 //    private Vehicle nextVehicle=null;
@@ -22,41 +24,83 @@ public class VehicleController implements TrafficLightEventListener {
         this.view = view;
     }
     public void checkObstacles() {
-        double brakingDistance = vehicle.width()*1.2;
-            for (VehicleController controller : vehicleControllers) {
+        //        double brakingDistance = vehicle.width()*1.2;
+        double brakingDistance = vehicle.width();
+//        if (sameTimeAcceleration) {
+//            vehicle.setState(VehicleState.ACCELERATING);
+//            return;
+//        }
+        if (sameTimeAcceleration) {
+
+            if (state == TrafficLightsControl.Event.GREEN) {
+            if (vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
+                    vehicle.setState(VehicleState.ACCELERATING);
+                    return;
+                }
+            } else {
+                if (vehicle.x() + vehicle.width() < nextTrafficLightPosX) {
+                    boolean trafficLightTooClose = vehicle.x() + vehicle.width() < nextTrafficLightPosX && vehicle.x() + vehicle.width() + brakingDistance > nextTrafficLightPosX;
+                    boolean StageNeedToStop = state == TrafficLightsControl.Event.RED || state == TrafficLightsControl.Event.YELLOW || state == TrafficLightsControl.Event.RED_YELLOW;
+                    if (trafficLightTooClose && StageNeedToStop) {
+                        vehicle.setState(VehicleState.SLOWING);
+                        return;
+                    }
+                    for (VehicleController controller : vehicleControllers) { // если догнал автомобиль
+                        Vehicle other = controller.vehicle;
+                        // vehicle.x() x y левый верхний угол прямоугольника
+                        boolean nextVehicleTooClose = other.x() > vehicle.x() + vehicle.width() && vehicle.x() + vehicle.width() + brakingDistance > other.x();
+                        if (nextVehicleTooClose) {
+                            vehicle.setState(VehicleState.SLOWING);
+                            return;
+                        }
+                    }
+                }
+            }
+
+        }
+        else
+
+        {
+
+            for (VehicleController controller : vehicleControllers) { // если догнал автомобиль
                 Vehicle other = controller.vehicle;
                 // vehicle.x() x y левый верхний угол прямоугольника
-                boolean nextVehicleTooClose = other.x() > vehicle.x()+ vehicle.width() && vehicle.x()+ vehicle.width() + brakingDistance > other.x();
+                boolean nextVehicleTooClose = other.x() > vehicle.x() + vehicle.width() && vehicle.x() + vehicle.width() + brakingDistance > other.x();
                 if (nextVehicleTooClose) {
                     vehicle.setState(VehicleState.SLOWING);
                     return;
                 }
             }
-        boolean trafficLightTooClose = vehicle.x() + vehicle.width() < nextTrafficLightPosX && vehicle.x()+ vehicle.width()+brakingDistance > nextTrafficLightPosX;
-        boolean StageNeedToStop = state == TrafficLightsControl.Event.RED || state == TrafficLightsControl.Event.YELLOW || state == TrafficLightsControl.Event.RED_YELLOW;
-        if (trafficLightTooClose && StageNeedToStop) {
-            vehicle.setState(VehicleState.SLOWING);
-            return;
-        }
+            boolean trafficLightTooClose = vehicle.x() + vehicle.width() < nextTrafficLightPosX && vehicle.x() + vehicle.width() + brakingDistance > nextTrafficLightPosX;
+            boolean StageNeedToStop = state == TrafficLightsControl.Event.RED || state == TrafficLightsControl.Event.YELLOW || state == TrafficLightsControl.Event.RED_YELLOW;
+            if (trafficLightTooClose && StageNeedToStop) {
+                vehicle.setState(VehicleState.SLOWING);
+                return;
+            }
 
-        if (vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
-            double minDistance = 1000;
-            for (VehicleController controller : vehicleControllers) {
-                Vehicle other = controller.vehicle;
-                if (other.x() > vehicle.x() && other.x() < minDistance) {
-                    minDistance = other.x();
+            if (vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
+                double minDistance = 1000;
+                for (VehicleController controller : vehicleControllers) {
+                    Vehicle other = controller.vehicle;
+                    if (other.x() > vehicle.x() && other.x() < minDistance) {
+                        minDistance = other.x();
+                    }
+                }
+                if (sameTimeAcceleration) {
+                    vehicle.setState(VehicleState.ACCELERATING);
+                    return;
+                }
+                if (minDistance > brakingDistance) {
+                    vehicle.setState(VehicleState.ACCELERATING);
+                    return;
                 }
             }
-            if (minDistance > brakingDistance) {
-                vehicle.setState(VehicleState.ACCELERATING);
-                return;
-            }
-        }
 
-        if (vehicle.x() < nextTrafficLightPosX) {
-            if (state == TrafficLightsControl.Event.GREEN && vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
-                vehicle.setState(VehicleState.ACCELERATING);
-                return;
+            if (vehicle.x() < nextTrafficLightPosX) {
+                if (state == TrafficLightsControl.Event.GREEN && vehicle.state() == VehicleState.SLOWING || vehicle.state() == VehicleState.STANDING) {
+                    vehicle.setState(VehicleState.ACCELERATING);
+                    return;
+                }
             }
         }
 //        boolean
@@ -100,6 +144,10 @@ public class VehicleController implements TrafficLightEventListener {
     @Override
     public void update(TrafficLightsControl.Event eventType, TrafficLightEvent event) {
         state = eventType;
+    }
+
+    public void setSameTimeAcceleration(boolean sameTimeAcceleration) {
+        this.sameTimeAcceleration = sameTimeAcceleration;
     }
 
 //    public void setNextVehicle(Vehicle nextVehicle) {

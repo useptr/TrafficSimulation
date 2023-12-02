@@ -36,6 +36,7 @@ public class TrafficLightComponent {
     public TrafficLightComponent() {
         trafficLightVBox = new VBox(trafficLightRedCircle, trafficLightYellowCircle, trafficLightGreenCircle);
         trafficLightPane = new Pane(trafficLightVBox);
+        trafficLightPane.setStyle("-fx-background-color: gray;");
         initTimelines();
     }
     public Pane root() {
@@ -107,5 +108,7 @@ public class TrafficLightComponent {
         resetCircles();
         yellowBlinkingTimeline.play();
     }
-
+    public void off() {
+        resetCircles();
+    }
 }
