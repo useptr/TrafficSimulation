@@ -24,36 +24,32 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import org.apache.poi.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class Controller {
-    private final static CarFactory carFactory = new CarFactory();
-    private final double WIDTH=700, HEIGHT=300;
-    private final double DURATION = 10; // 10 millis - 100 fps
-    public boolean sameTimeAcceleration = false;
-    private TrafficLightsControl trafficLightsControl = new TrafficLightsControl();
-    private LinkedList<VehicleController> vehicleControllers = VehicleController.vehicleControllers;
-    private AnchorPane map = new AnchorPane();
-    private int simulationTime = 0;
-    // 10 millis - 100 fps
-    private Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DURATION),this::vehicleHandler));
-    private Rectangle road = new Rectangle(WIDTH, HEIGHT/3);
-    private Rectangle car = new Rectangle(20, 15);
-    private NumberAxis xAxis = new NumberAxis();
-    private NumberAxis yAxis  = new NumberAxis();
-    private LineChart<Number,Number> lineChart = new LineChart(xAxis, yAxis);
-    private XYChart.Series series = new XYChart.Series();
+public class mainScreenController {
+    private final static CarFactory carFactory = new CarFactory(); // абрика для создания новых автомобилей
+    private final double WIDTH=700, HEIGHT=300; // размер окна симуляции
+    private final double DURATION = 10; // частота обновления экрана 10 милисекунд - 100 fps
+    public boolean sameTimeAcceleration = false; // включина ли стратегия одновременного разгона
+    private TrafficLightsControl trafficLightsControl = new TrafficLightsControl(); // графический элемент светофора
+    private LinkedList<VehicleController> vehicleControllers = VehicleController.vehicleControllers; // список всех автомобилей
+    private AnchorPane map = new AnchorPane(); // корневой элемент для всех объектов окна симуляции
+    private int simulationTime = 0; // время симуляции
+    private Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DURATION),this::handle)); // таймер для перерисовки объектов каждый новый кадр
+    private Rectangle road = new Rectangle(WIDTH, HEIGHT/3); // дорога
+    private NumberAxis xAxis = new NumberAxis(); // данные по оси x для графика
+    private NumberAxis yAxis  = new NumberAxis(); // данные по оси y для графика
+    private LineChart<Number,Number> lineChart = new LineChart(xAxis, yAxis); // данные для графика
+    private XYChart.Series series = new XYChart.Series(); // элемент для построения графика
     @FXML
     private void initialize() {
         map.setMaxWidth(WIDTH);
@@ -95,7 +91,7 @@ public class Controller {
         } else {
             TextFieldNewCarAppearance.setText(""+carAppearance);
         }
-    }
+    } // сбросить симуляцию
     public void reset() {
         simulationTime = 0;
         passedVehicles = 0;
@@ -109,18 +105,11 @@ public class Controller {
             map.getChildren().remove(vehicleController.view.view());
         }
         vehicleControllers.clear();
-    }
-    private int passedVehicles = 0;
-    private double countdown = 0;
-    private int carAppearance = 2;
-//    private void drawChart() {
-////        if (lineChart.getData() != null)
-////            lineChart.getData().clear();
-////        PaneChart.getChildren().clear();
-//        lineChart.getData().add(series);
-//        PaneChart.getChildren().add(lineChart);
-//    }
-private void exportLineChartToExcel() {
+    } // запустить симуляцию
+    private int passedVehicles = 0; // количество проехавших машин
+    private double countdown = 0; // подсчет времени для генерации машин
+    private int carAppearance = 2; // время появления новой машины
+    private void exportLineChartToExcel() {
     SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss");
     Date date = new Date();
 //    System.out.println(formatter.format(date));
@@ -151,43 +140,22 @@ private void exportLineChartToExcel() {
     } catch (IOException e) {
         e.printStackTrace();
     }
-}
-    public void vehicleHandler(ActionEvent event) {
+} // сохранение графика в excel документ
+    public void handle(ActionEvent event) {
         if (simulationTime%1000 == 0) {
-//            System.out.println(simulationTime);
             series.getData().add(new XYChart.Data(simulationTime/1000, passedVehicles));
-//            drawChart();
         }
         simulationTime += DURATION;
         LabelSimulationTime.setText("время сиуляции: " + simulationTime/1000);
         LabelPassedVehicles.setText("машины проехавшие светофор: " + passedVehicles);
         countdown += DURATION;
-        if (countdown > carAppearance*1000 ) { // && count < 3
+        if (countdown > carAppearance*1000 ) {
             countdown = 0;
             createVehicle();
         }
-//        double offset = 2;
-//        car.setX(car.getX()+offset);
-
         moveVehicles();
-//        removeVehiclesBeyondMap();
-    }
-    @FXML
-    private void buttonChartExportAction() {
-        exportLineChartToExcel();
-    }
-    @FXML
-    private void buttonStartAction() {
-        ButtonStart.setDisable(true);
-        ButtonReset.setDisable(false);
-        start();
-    }
-    @FXML
-    private void buttonResetAction() {
-        ButtonReset.setDisable(true);
-        ButtonStart.setDisable(false);
-        reset();
-    }
+        removeVehiclesBeyondMap();
+    } // метод вызывающийся каждый новый кадр
     public void moveVehicles() {
         for (VehicleController vehicle : vehicleControllers) {
             vehicle.update(DURATION);
@@ -195,11 +163,8 @@ private void exportLineChartToExcel() {
                 vehicle.passed = true;
                 passedVehicles++;
             }
-//            view.vehicle.update(2);
-//            view.update();
-//            System.out.println(view.view().getLayoutX() + " " + view.view().getLayoutY());
         }
-    }
+    } // передвинуть все автомобили
     public void createVehicle() {
         VehicleController controller = carFactory.createVehicle(20, 15);
 
@@ -218,10 +183,35 @@ private void exportLineChartToExcel() {
         map.getChildren().add(controller.view.view());
         controller.view.setPosition(x, y);
         vehicleControllers.add(controller);
-//        controller.setNextTrafficLight(WIDTH/2-trafficLightsControl.getPrefHeight()/2);
         controller.setNextTrafficLight(trafficLightsControl.getLayoutX()); // WIDTH/2
         trafficLightsControl.events.subscribeAll(controller);
+    } // создать новый автомобиль
+    public void removeVehiclesBeyondMap() {
+        for (int i =0; i < vehicleControllers.size();) {
+            Vehicle vehicle = vehicleControllers.get(i).vehicle;
+            if (vehicle.x() > WIDTH) {
+                vehicleControllers.remove(i);
+            } else
+                ++i;
+        }
+    } // удалить автомобиль покинувший сцену
+    @FXML
+    private void buttonChartExportAction() {
+        exportLineChartToExcel();
     }
+    @FXML
+    private void buttonStartAction() {
+        ButtonStart.setDisable(true);
+        ButtonReset.setDisable(false);
+        start();
+    }
+    @FXML
+    private void buttonResetAction() {
+        ButtonReset.setDisable(true);
+        ButtonStart.setDisable(false);
+        reset();
+    }
+
     private TextFieldContainInt parseStageDuration(TextField textField) {
         TextFieldContainInt textFieldContainInt = new TextFieldContainInt();
         try {
@@ -235,14 +225,12 @@ private void exportLineChartToExcel() {
         }
         return textFieldContainInt;
     }
-
     @FXML
     private Pane PaneChart;
     @FXML
     private AnchorPane root;
-@FXML
-private TextField TextFieldNewCarAppearance;
-
+    @FXML
+    private TextField TextFieldNewCarAppearance;
     @FXML
     private HBox screenHBox;
     @FXML
@@ -260,15 +248,10 @@ private TextField TextFieldNewCarAppearance;
         if (ToggleButtonSameTimeAccelerating.isSelected()) {
             ToggleButtonSameTimeAccelerating.setText("Вкл.");
             sameTimeAcceleration = true;
-//            ToggleButtonSameTimeAccelerating.on();
         }
         else {
             ToggleButtonSameTimeAccelerating.setText("Выкл.");
             sameTimeAcceleration = false;
-//            trafficLightsControl.reset();
         }
     }
-//    protected void onHelloButtonClick() {
-//        welcomeText.setText("Welcome to JavaFX Application!");
-//    }
 }

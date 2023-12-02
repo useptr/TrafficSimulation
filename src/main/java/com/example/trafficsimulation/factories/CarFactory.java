@@ -17,6 +17,5 @@ public class CarFactory implements VehicleFactory {
         Vehicle vehicle = new Vehicle(width, height);
         VehicleView view = new VehicleView(width, height, colors[index]);
         return new VehicleController(vehicle, view);
-//        return new Vehicle();
     }
 }

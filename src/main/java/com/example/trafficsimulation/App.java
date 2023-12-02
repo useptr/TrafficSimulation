@@ -1,6 +1,6 @@
 package com.example.trafficsimulation;
 
-import com.example.trafficsimulation.controllers.Controller;
+import com.example.trafficsimulation.controllers.mainScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,7 +15,7 @@ public class App extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         Pane root = fxmlLoader.load(App.class.getResource("main-screen.fxml"));
-        Controller controller = (Controller)fxmlLoader.getController();
+        mainScreenController controller = (mainScreenController)fxmlLoader.getController();
 
         Scene scene = new Scene(root);
         stage.setTitle("Traffic simulation");

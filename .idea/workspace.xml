@@ -5,19 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="37fee45a-cb00-48de-8819-c80ee1426f05" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/MapController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/mainScreenController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/VehicleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/VehicleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/TrafficLightComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/TrafficLightComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/TrafficLightsControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/TrafficLightsControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/interfaces/TrafficLightBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/trafficlight/interfaces/TrafficLightBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/factories/CarFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/factories/CarFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/models/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/models/Vehicle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/views/TrafficLightView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/views/VehicleView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/views/VehicleView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/trafficsimulation/main-screen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/trafficsimulation/main-screen.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +63,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.25964913",
-    "settings.editor.selected.configurable": "MavenSettings"
+    "settings.editor.selected.configurable": "inlay.hints"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -131,17 +126,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/trafficsimulation/controllers/Controller.java</url>
-          <line>240</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

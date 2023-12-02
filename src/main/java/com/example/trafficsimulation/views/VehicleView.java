@@ -6,24 +6,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class VehicleView {
-//    public Vehicle vehicle;
-    private Rectangle view;
+    private Rectangle view; // прямоугольник для представления
     public VehicleView(double width, double height, Color color) {
-//        this.vehicle = vehicle;
-//        System.out.println(width + " " + height);
-//        System.out.println(vehicle.width() + " " + vehicle.height());
         view = new Rectangle(width, height);
-//        map.getChildren().add(view);
         view.setFill(color);
-//        view.setLayoutX(vehicle.x());
-//        view.setLayoutY(vehicle.y());
     }
     public void setPosition(double x,  double y) {
-//        System.out.println(x + " " + y);
         view.setLayoutX(x);
         view.setLayoutY(y);
     }
-
     public Rectangle view() {
         return view;
     }

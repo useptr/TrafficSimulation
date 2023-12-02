@@ -2,19 +2,27 @@ package com.example.trafficsimulation.models;
 
 public class Vehicle {
     private VehicleState state = VehicleState.MOVING;
-    private final double WIDTH, HEIGHT;
-    private double x, y;
-    private double accelerationTime = 2, decelerationTime = accelerationTime/2; // с
-    private double accelerationTimeLeft = 0, decelerationTimeLeft = 0;
-    private double mainlineSpeed = 100, speed = 0; // м/с mainlineSpeed
-    private double brakingDistance;
+    private final double WIDTH, HEIGHT; // высота и ширина автомобиля
+    private double x, y; // координаты автомобиля
+    private double mainlineSpeed = 100; // стандартная скорость м/с
+    private double speed = mainlineSpeed; // текущая скорость м/с
+    private double accelerationTimeLeft = 0; // текущее время разгона с
+    private double accelerationTime = 2; // время разгона с
+    private double acceleration = mainlineSpeed/ accelerationTime; // ускорение м/с
+    // S=ut+0.5at^2
+    // S - расстояние,
+    // u - начальная скорость,
+    // t - время,
+    // a - ускорение.
     public Vehicle(double width, double height) {
-//        System.out.println(getNewSpeed(0, 0, decelerationTime, mainlineSpeed, 0));
-//        System.out.println(getNewSpeed(decelerationTime, 0, decelerationTime, mainlineSpeed, 0));
         WIDTH = width;
         HEIGHT = height;
-
-//        decelerationTime = (weight*speed)/Friction force
+    }
+    public double acceleration() {
+        return acceleration;
+    }
+    public void setAccelerationTimeLeft(double accelerationTimeLeft) {
+        this.accelerationTimeLeft = accelerationTimeLeft;
     }
     public void setPosition(double x, double y) {
         this.x = x;
@@ -24,8 +32,7 @@ public class Vehicle {
         this.state = state;
     }
     public void move(double timeLeft) {
-        x += timeLeft*mainlineSpeed;
-//        accelerationTimeLeft = decelerationTimeLeft = 0;
+        x += timeLeft*speed;
     }
     public void accelerate(double timeLeft) {
         accelerationTimeLeft += timeLeft;
@@ -34,42 +41,13 @@ public class Vehicle {
             speed = mainlineSpeed;
             accelerationTimeLeft = 0;
         } else {
-//            if (speed == 0) {
-//                System.out.println("0");
-//            }
-            speed = getNewSpeedWithAccelerate(accelerationTimeLeft, 0, accelerationTime, 0, mainlineSpeed);
+            speed = acceleration * accelerationTimeLeft;
+            if (speed >= mainlineSpeed)
+                speed =mainlineSpeed;
         }
         x += timeLeft*speed;
-
-    }
-    public double getNewSpeedWithAccelerate(double old, double oldMin, double oldMax, double newMin, double newMax) {
-        double oldRange = oldMax - oldMin;
-        double newRange = newMax - newMin;
-        double converted = (((old - oldMin) * newRange) / oldRange) + newMin;
-        return converted;
-    }
-    public double getNewSpeedWithSlow(double old, double oldMin, double oldMax, double newMin, double newMax) {
-        double oldRange = oldMax - oldMin;
-        double newRange = newMin - newMax;
-        double converted = (((old - oldMin) * newRange) / oldRange) - newMin;
-        return -converted;
-    }
-    public void slow(double timeLeft) {
-//        System.out.println(speed);
-        decelerationTimeLeft += timeLeft;
-        if (decelerationTimeLeft >= decelerationTime) {
-            decelerationTimeLeft = 0;
-            state = VehicleState.STANDING;
-            speed = 0;
-        } else {
-            speed = getNewSpeedWithSlow(decelerationTimeLeft, 0, decelerationTime, mainlineSpeed, 0);
-            System.out.println(speed);
-//            System.out.println(speed);
-            x += timeLeft * speed;
-        }
     }
     public void update(double timeLeft) {
-
         if (state == VehicleState.MOVING) {
             move(timeLeft);
         } else if (state == VehicleState.ACCELERATING) {
@@ -84,15 +62,18 @@ public class Vehicle {
     public double width() {
         return WIDTH;
     }
-
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+    public double speed( ) {
+        return speed;
+    }
     public double height() {
         return HEIGHT;
     }
-
     public double x() {
         return x;
     }
-
     public double y() {
         return y;
     }
