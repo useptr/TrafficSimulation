@@ -43,9 +43,10 @@
             <VBox alignment="TOP_CENTER">
                <children>
                   <Pane fx:id="PaneChart" prefHeight="400.0" prefWidth="500.0" />
-                  <Button onAction="#buttonChartExportAction" mnemonicParsing="false" text="экспорт" />
+                  <Button mnemonicParsing="false" onAction="#buttonChartExportAction" text="экспорт" />
                </children>
             </VBox>
+            <Button id="createNewSimulation" onAction="#createNewSimulationAction" mnemonicParsing="false" text="создать новую симуляцию" />
          </children></HBox>
    </children>
 </AnchorPane>
