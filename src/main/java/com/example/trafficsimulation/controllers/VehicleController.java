@@ -10,7 +10,7 @@ import com.example.trafficsimulation.views.VehicleView;
 import java.util.LinkedList;
 
 public class VehicleController implements TrafficLightEventListener {
-    public static LinkedList<VehicleController> vehicleControllers = new LinkedList<>(); // список всех автомобилей
+//    public LinkedList<VehicleController> vehicleControllers = new LinkedList<>(); // список всех автомобилей
     public double nextTrafficLightPosX; // позиция светофора
     public boolean passed = false; // проехал ли автомобиль светофор
     private boolean sameTimeAcceleration = false; // включина ли стратегия одновременного разгона
@@ -29,7 +29,7 @@ public class VehicleController implements TrafficLightEventListener {
             return true;
         return false;
     } // проверяет должен ли автомобиль остановиться перед светофором
-    public void checkObstaclesWidthSameAcceleration() {
+    public void checkObstaclesWidthSameAcceleration(LinkedList<VehicleController> vehicleControllers) {
         if (trafficLightNotGreenAndTooClose()) {
             vehicle.setState(VehicleState.SLOWING);
             return;
@@ -57,8 +57,8 @@ public class VehicleController implements TrafficLightEventListener {
             vehicle.setState(VehicleState.ACCELERATING);
     } // останавливает/разгоняет автомобиль в зависимости от того есть ли препядствия
     // при включеной стратегией одновременного разгона
-    public void checkObstacles() {
-        if (existObstacles()) {
+    public void checkObstacles(LinkedList<VehicleController> vehicleControllers) {
+        if (existObstacles(vehicleControllers)) {
             if (vehicle.state() == VehicleState.ACCELERATING || vehicle.state() == VehicleState.MOVING)
                 vehicle.setState(VehicleState.SLOWING);
         } else {
@@ -66,7 +66,7 @@ public class VehicleController implements TrafficLightEventListener {
                 vehicle.setState(VehicleState.ACCELERATING);
         }
     } // останавливает/разгоняет автомобиль в зависимости от того есть ли препядствия
-    public boolean existObstacles() {
+    public boolean existObstacles(LinkedList<VehicleController> vehicleControllers) {
         double brakingDistance = vehicle.width();
         for (VehicleController controller : vehicleControllers) { // если машина догнала другой автомобиль
             Vehicle other = controller.vehicle;
@@ -81,11 +81,11 @@ public class VehicleController implements TrafficLightEventListener {
         }
         return false;
     } // проверяет есть ли у автомобиля препядствия
-    public void update(double timeLeft) {
+    public void update(double timeLeft, LinkedList<VehicleController> vehicleControllers) {
         if (sameTimeAcceleration)
-            checkObstaclesWidthSameAcceleration();
+            checkObstaclesWidthSameAcceleration(vehicleControllers);
         else {
-            checkObstacles();
+            checkObstacles(vehicleControllers);
         }
         vehicle.update(timeLeft/1000);
         view.setPosition(vehicle.x(),vehicle.y());
@@ -100,4 +100,7 @@ public class VehicleController implements TrafficLightEventListener {
     public void setSameTimeAcceleration(boolean sameTimeAcceleration) {
         this.sameTimeAcceleration = sameTimeAcceleration;
     }
+//    public LinkedList<VehicleController> vehicleControllers() {
+//        return vehicleControllers;
+//    }
 }

@@ -1,52 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trafficsimulation.controllers.mainScreenController">
    <children>
       <HBox fx:id="screenHBox">
          <children>
-            <VBox alignment="TOP_CENTER" spacing="5.0">
+            <VBox fx:id="controlVBox" alignment="TOP_CENTER" minHeight="500.0" minWidth="300.0" spacing="10.0">
                <children>
-                  <Button fx:id="ButtonStart" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#buttonStartAction" text="старт" />
-                  <Button fx:id="ButtonReset" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#buttonResetAction" text="сброс" />
-                  <Label fx:id="LabelSimulationTime" text="время сиуляции: 0" />
-                  <Label fx:id="LabelPassedVehicles" text="машины проехавшие светофор: 0" />
-                  <VBox alignment="TOP_CENTER">
-                     <children>
-                        <Label text="Появление новой машины (с)" />
-                        <TextField fx:id="TextFieldNewCarAppearance" maxWidth="60.0" prefWidth="60.0" text="2" />
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER">
-                     <children>
-                        <Label text="одинаковый разгон для всех" />
-                        <ToggleButton fx:id="ToggleButtonSameTimeAccelerating" mnemonicParsing="false" onAction="#toggleButtonSameTimeAcceleratingAction" text="выкл" />
-                     </children>
-                  </VBox>
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <padding>
-                  <Insets left="20.0" right="20.0" top="10.0" />
-               </padding>
-            </VBox>
-            <VBox alignment="TOP_CENTER">
-               <children>
-                  <Pane fx:id="PaneChart" prefHeight="400.0" prefWidth="500.0" />
-                  <Button mnemonicParsing="false" onAction="#buttonChartExportAction" text="экспорт" />
+                  <ListView fx:id="windowsListView" prefHeight="200.0" prefWidth="200.0" />
+                  <Button onAction="#closeSimulation" mnemonicParsing="false" text="закрыть выбранную симуляцию" />
+                  <Button fx:id="createNewSimulation" mnemonicParsing="false" onAction="#createNewSimulationAction" text="создать новую симуляцию" />
                </children>
             </VBox>
-            <Button id="createNewSimulation" onAction="#createNewSimulationAction" mnemonicParsing="false" text="создать новую симуляцию" />
          </children></HBox>
    </children>
 </AnchorPane>

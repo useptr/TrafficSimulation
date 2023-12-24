@@ -43,7 +43,7 @@ public class SimulationController {
     private final double DURATION = 10; // частота обновления экрана 10 милисекунд - 100 fps
     public boolean sameTimeAcceleration = false; // включина ли стратегия одновременного разгона
     private TrafficLightsControl trafficLightsControl = new TrafficLightsControl(); // графический элемент светофора
-    private LinkedList<VehicleController> vehicleControllers = VehicleController.vehicleControllers; // список всех автомобилей
+    public LinkedList<VehicleController> vehicleControllers = new LinkedList<>(); // список всех автомобилей
     private AnchorPane map = new AnchorPane(); // корневой элемент для всех объектов окна симуляции
     private int simulationTime = 0; // время симуляции
     private Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DURATION),this::handle)); // таймер для перерисовки объектов каждый новый кадр
@@ -52,6 +52,7 @@ public class SimulationController {
     private NumberAxis yAxis  = new NumberAxis(); // данные по оси y для графика
     private LineChart<Number,Number> lineChart = new LineChart(xAxis, yAxis); // данные для графика
     private XYChart.Series series = new XYChart.Series(); // элемент для построения графика
+    // верстка интерфейса
     private Pane PaneChart;
     private AnchorPane root = new AnchorPane();
     private TextField TextFieldNewCarAppearance = new TextField("2");
@@ -59,7 +60,6 @@ public class SimulationController {
     private VBox controlVbox;
     private Label LabelSimulationTime = new Label("время симуляции: 0");
     private Label LabelPassedVehicles = new Label("Машины проехавшие светофор: 0");
-
     private Button ButtonStart = new Button("старт");
     private Button ButtonReset = new Button("сброс");
     private VBox carAppearanceVbox;
@@ -70,6 +70,7 @@ public class SimulationController {
     public SimulationController() {
         ButtonStart.setOnAction(this::buttonStartAction);
         ButtonReset.setOnAction(this::buttonResetAction);
+        ToggleButtonSameTimeAccelerating.setDisable(true);
 
         ToggleButtonVbox = new VBox(AcceleratingLabel, ToggleButtonSameTimeAccelerating);
         carAppearanceVbox = new VBox(carAppearanceLabel, TextFieldNewCarAppearance);
@@ -95,8 +96,6 @@ public class SimulationController {
 
 
         timeline.setCycleCount(Animation.INDEFINITE);
-//        screenHBox.getChildren().add(mapController.getMap());
-//        screenHBox.getChildren().add(map);
         screenHBox = new HBox(controlVbox, map);
 
         root.getChildren().add(screenHBox);
@@ -182,7 +181,7 @@ public class SimulationController {
     } // метод вызывающийся каждый новый кадр
     public void moveVehicles() {
         for (VehicleController vehicle : vehicleControllers) {
-            vehicle.update(DURATION);
+            vehicle.update(DURATION, vehicleControllers);
             if (vehicle.vehicle.x() + vehicle.vehicle.width() > vehicle.nextTrafficLightPosX && !vehicle.passed) {
                 vehicle.passed = true;
                 passedVehicles++;
